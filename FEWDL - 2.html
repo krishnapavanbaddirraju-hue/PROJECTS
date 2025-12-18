@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ScholarNet Dashboard - Terminal View</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+
+        .terminal {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #000000;
+            border: 3px solid #00ff00;
+            padding: 30px;
+            box-shadow: 0 0 50px rgba(0, 255, 0, 0.4);
+        }
+
+        .separator {
+            color: #00ff00;
+            margin: 10px 0;
+            letter-spacing: 1px;
+        }
+
+        .section {
+            margin: 30px 0;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .post-card {
+            border: 2px solid #00aa00;
+            padding: 15px;
+            margin: 20px 0;
+            background: rgba(0, 50, 0, 0.2);
+        }
+
+        .status-trending {
+            color: #ff6600;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .button {
+            background: transparent;
+            border: 2px solid #00ff00;
+            color: #00ff00;
+            padding: 8px 16px;
+            font-family: 'Courier New', monospace;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.3s;
+        }
+
+        .button:hover {
+            background: #00ff00;
+            color: #000000;
+        }
+
+        .input-section {
+            background: rgba(0, 50, 0, 0.1);
+            border: 2px solid #00aa00;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        input, select, textarea {
+            background: #000000;
+            border: 1px solid #00aa00;
+            color: #00ff00;
+            padding: 8px;
+            font-family: 'Courier New', monospace;
+            width: 100%;
+            margin: 5px 0;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #00ff00;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .emoji {
+            font-family: 'Segoe UI Emoji', 'Apple Color Emoji', sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal">
+        <!-- Main Header - Always Visible -->
+        <div class="separator">============================================================</div>
+        <div class="header" style="font-size: 1.5em; margin: 20px 0;">📚 SCHOLARNET DASHBOARD 📚</div>
+        <div class="separator">============================================================</div>
+
+        <!-- Tab Buttons -->
+        <div class="tab-buttons">
+            <button class="button" onclick="showScreen('initial')">Initial Dashboard</button>
+            <button class="button" onclick="showScreen('withContent')">After Adding Content</button>
+            <button class="button" onclick="showScreen('filtered')">Filter Applied</button>
+            <button class="button" onclick="showScreen('liked')">After Liking Post</button>
+            <button class="button" onclick="showScreen('createPost')">Create Post</button>
+        </div>
+
+        <div class="separator">============================================================</div>
+
+        <!-- Initial Dashboard -->
+        <div id="initial" class="section">
+            <div class="header">INITIAL STATE</div>
+            <div class="separator">------------------------------------------------------------</div>
+            <div>Total Groups: 0</div>
+            <div>Total Posts: 0</div>
+            <div>Your Contributions: 0</div>
+            <div style="margin-top: 20px;"></div>
+            <div>Status: No groups joined yet</div>
+            <div>Message: "Join study groups to start collaborating!"</div>
+            <div class="separator">============================================================</div>
+        </div>
+
+        <!-- Dashboard with Content -->
+        <div id="withContent" class="section hidden">
+            <div class="header">CURRENT STATUS</div>
+            <div class="separator">------------------------------------------------------------</div>
+            <div>Total Groups: 3</div>
+            <div>Total Posts: <span id="total-posts">12</span></div>
+            <div>Notifications: 3</div>
+            <div style="margin-top: 20px;"></div>
+
+            <!-- Post Card 1 -->
+            <div class="post-card">
+                <div>POST CARD 1:</div>
+                <div class="separator">----------------------------------------------------------</div>
+                <div>Author: Sarah Johnson <span class="emoji">👩‍💼</span></div>
+                <div>Group: Computer Science</div>
+                <div>Type: Note</div>
+                <div>Posted: 2 hours ago</div>
+                <div style="margin-top: 10px;"></div>
+                <div>Title: Data Structures Cheat Sheet</div>
+                <div>Content: Comprehensive guide to common data structures</div>
+                <div style="margin-top: 10px;"></div>
+                <div>Tags: #algorithms #data-structures</div>
+                <div>Engagement: <span id="post1-likes">42</span> likes, 8 comments</div>
+                <div class="status-trending">Status: Trending 🔥</div>
+                <div style="margin-top: 10px;">
+                    <button class="button" onclick="likePost(1)">👍 Like</button>
+                    <button class="button">💬 Comment</button>
+                    <button class="button">📤 Share</button>
+                </div>
+                <div class="separator">----------------------------------------------------------</div>
+            </div>
+
+            <!-- Post Card 2 -->
+            <div class="post-card">
+                <div>POST CARD 2:</div>
+                <div class="separator">----------------------------------------------------------</div>
+                <div>Author: Mike Davis <span class="emoji">👨‍🔬</span></div>
+                <div>Group: Mathematics Study Group</div>
+                <div>Type: Material</div>
+                <div>Posted: 5 hours ago</div>
+                <div style="margin-top: 10px;"></div>
+                <div>Title: Calculus II Practice Problems</div>
+                <div>Content: Collection of integration problems with solutions</div>
+                <div style="margin-top: 10px;"></div>
+                <div>Tags: #calculus #practice</div>
+                <div>Engagement: <span id="post2-likes">38</span> likes, 12 comments</div>
+                <div style="margin-top: 10px;">
+                    <button class="button" onclick="likePost(2)">👍 Like</button>
+                    <button class="button">💬 Comment</button>
+                    <button class="button">📤 Share</button>
+                </div>
+                <div class="separator">----------------------------------------------------------</div>
+            </div>
+
+            <div class="separator">============================================================</div>
+        </div>
+
+        <!-- Filtered View -->
+        <div id="filtered" class="section hidden">
+            <div class="separator">============================================================</div>
+            <div>FILTER: Computer Science</div>
+            <div class="separator">============================================================</div>
+            <div>Showing 8 of 12 posts</div>
+            <div style="margin-top: 20px;"></div>
+            <div>POST 1: Data Structures Cheat Sheet</div>
+            <div>POST 2: Sorting Algorithm Visualization</div>
+            <div>POST 3: Dynamic Programming Guide</div>
+            <div class="separator">============================================================</div>
+            <div style="margin-top: 20px;">
+                <button class="button" onclick="showScreen('withContent')">🔄 Clear Filter</button>
+            </div>
+        </div>
+
+        <!-- After Liking Post -->
+        <div id="liked" class="section hidden">
+            <div class="separator">============================================================</div>
+            <div>ACTION: Liked "Data Structures Cheat Sheet"</div>
+            <div class="separator">============================================================</div>
+            <div style="margin-top: 20px;">Updated Status:</div>
+            <div>Engagement: <span id="liked-count">43</span> likes, 8 comments</div>
+            <div style="margin-top: 20px;"></div>
+            <div>Dashboard Updated:</div>
+            <div>Your Contributions: <span id="contributions">6</span> (increased by 1)</div>
+            <div class="separator">============================================================</div>
+            <div style="margin-top: 20px;">
+                <button class="button" onclick="showScreen('withContent')">← Back to Dashboard</button>
+            </div>
+        </div>
+
+        <!-- Create Post Form -->
+        <div id="createPost" class="section hidden">
+            <div class="separator">============================================================</div>
+            <div class="header">CREATE NEW POST</div>
+            <div class="separator">============================================================</div>
+            
+            <div class="input-section">
+                <div>Post Type:</div>
+                <select id="post-type">
+                    <option value="Note">Note</option>
+                    <option value="Material">Material</option>
+                    <option value="Discussion">Discussion</option>
+                </select>
+                
+                <div style="margin-top: 15px;">Title:</div>
+                <input type="text" id="post-title" placeholder="Enter post title...">
+                
+                <div style="margin-top: 15px;">Content:</div>
+                <textarea id="post-content" rows="4" placeholder="Share your notes, materials, or start a discussion..."></textarea>
+                
+                <div style="margin-top: 15px;">Target Group:</div>
+                <select id="post-group">
+                    <option value="Computer Science">Computer Science</option>
+                    <option value="Mathematics Study Group">Mathematics Study Group</option>
+                    <option value="Physics Research">Physics Research</option>
+                </select>
+                
+                <div style="margin-top: 15px;">Tags (comma-separated):</div>
+                <input type="text" id="post-tags" placeholder="e.g., algorithms, calculus, quantum-mechanics">
+                
+                <div style="margin-top: 20px;">
+                    <button class="button" onclick="createNewPost()">📤 Publish Post</button>
+                    <button class="button" onclick="showScreen('withContent')">❌ Cancel</button>
+                </div>
+            </div>
+            
+            <div class="separator">============================================================</div>
+        </div>
+
+        <!-- Success Message -->
+        <div id="success-message" class="section hidden">
+            <div class="separator">============================================================</div>
+            <div style="text-align: center; font-size: 1.2em; color: #00ff00;">
+                ✅ POST PUBLISHED SUCCESSFULLY!
+            </div>
+            <div class="separator">============================================================</div>
+            <div style="margin-top: 20px;">
+                <div>Your post "<span id="success-title"></span>" has been shared with the <span id="success-group"></span> group.</div>
+                <div style="margin-top: 15px;"></div>
+                <div>Stats:</div>
+                <div>- Type: <span id="success-type"></span></div>
+                <div>- Visible to group members</div>
+                <div>- Your contributions: <span id="success-contributions"></span></div>
+            </div>
+            <div style="margin-top: 20px;">
+                <button class="button" onclick="showScreen('withContent')">View Dashboard</button>
+                <button class="button" onclick="showScreen('createPost')">Create Another Post</button>
+            </div>
+            <div class="separator">============================================================</div>
+        </div>
+
+    </div>
+
+    <script>
+        let likeCounts = {1: 42, 2: 38};
+        let contributions = 5;
+        let totalPosts = 12;
+
+        function showScreen(screenName) {
+            // Hide all sections
+            const sections = ['initial', 'withContent', 'filtered', 'liked', 'createPost', 'success-message'];
+            sections.forEach(section => {
+                document.getElementById(section).classList.add('hidden');
+            });
+
+            // Show selected section
+            document.getElementById(screenName).classList.remove('hidden');
+
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        function likePost(postId) {
+            likeCounts[postId]++;
+            contributions++;
+            
+            // Update the like count in the post card
+            document.getElementById('post' + postId + '-likes').textContent = likeCounts[postId];
+            
+            // Update the liked screen
+            document.getElementById('liked-count').textContent = likeCounts[postId];
+            document.getElementById('contributions').textContent = contributions;
+            
+            // Show liked screen
+            setTimeout(() => {
+                showScreen('liked');
+            }, 300);
+        }
+
+        function createNewPost() {
+            const title = document.getElementById('post-title').value;
+            const content = document.getElementById('post-content').value;
+            const type = document.getElementById('post-type').value;
+            const group = document.getElementById('post-group').value;
+            const tags = document.getElementById('post-tags').value;
+
+            if (title && content) {
+                contributions++;
+                totalPosts++;
+                
+                // Update success message
+                document.getElementById('success-title').textContent = title;
+                document.getElementById('success-group').textContent = group;
+                document.getElementById('success-type').textContent = type;
+                document.getElementById('success-contributions').textContent = contributions;
+                document.getElementById('total-posts').textContent = totalPosts;
+                
+                // Clear form
+                document.getElementById('post-title').value = '';
+                document.getElementById('post-content').value = '';
+                document.getElementById('post-tags').value = '';
+                
+                // Show success message
+                showScreen('success-message');
+            } else {
+                alert('❌ Please fill in Title and Content fields!');
+            }
+        }
+
+        // Keyboard shortcut
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                showScreen('withContent');
+            }
+        });
+    </script>
+</body>
+</html>
