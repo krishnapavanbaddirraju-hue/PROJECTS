@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlantPal Dashboard - Terminal View</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+
+        .terminal {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #000000;
+            border: 3px solid #00ff00;
+            padding: 30px;
+            box-shadow: 0 0 50px rgba(0, 255, 0, 0.4);
+        }
+
+        .separator {
+            color: #00ff00;
+            margin: 10px 0;
+            letter-spacing: 1px;
+        }
+
+        .section {
+            margin: 30px 0;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .plant-card {
+            border: 2px solid #00aa00;
+            padding: 15px;
+            margin: 20px 0;
+            background: rgba(0, 50, 0, 0.2);
+        }
+
+        .status-healthy {
+            color: #00ff00;
+        }
+
+        .status-water {
+            color: #00aaff;
+        }
+
+        .status-overdue {
+            color: #ff3333;
+        }
+
+        .button {
+            background: transparent;
+            border: 2px solid #00ff00;
+            color: #00ff00;
+            padding: 8px 16px;
+            font-family: 'Courier New', monospace;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.3s;
+        }
+
+        .button:hover {
+            background: #00ff00;
+            color: #000000;
+        }
+
+        .input-section {
+            background: rgba(0, 50, 0, 0.1);
+            border: 2px solid #00aa00;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        input, select {
+            background: #000000;
+            border: 1px solid #00aa00;
+            color: #00ff00;
+            padding: 8px;
+            font-family: 'Courier New', monospace;
+            width: 100%;
+            margin: 5px 0;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #00ff00;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .blink {
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50%, 100% { opacity: 1; }
+            25%, 75% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal">
+        <!-- Main Header - Always Visible -->
+        <div class="separator">============================================================</div>
+        <div class="header" style="font-size: 1.5em; margin: 20px 0;">🌿 PLANTPAL DASHBOARD 🌿</div>
+        <div class="separator">============================================================</div>
+
+        <!-- Tab Buttons -->
+        <div class="tab-buttons">
+            <button class="button" onclick="showScreen('initial')">Initial Dashboard</button>
+            <button class="button" onclick="showScreen('withPlants')">After Adding Plants</button>
+            <button class="button" onclick="showScreen('filtered')">Filter Applied</button>
+            <button class="button" onclick="showScreen('watered')">After Watering</button>
+            <button class="button" onclick="showScreen('addPlant')">Add New Plant</button>
+        </div>
+
+        <div class="separator">============================================================</div>
+
+        <!-- Initial Dashboard -->
+        <div id="initial" class="section">
+            <div class="header">INITIAL STATE</div>
+            <div class="separator">------------------------------------------------------------</div>
+            <div>Total Plants: 0</div>
+            <div>Need Water Today: 0</div>
+            <div>Upcoming Care: 0</div>
+            <div style="margin-top: 20px;">Status: No plants added yet</div>
+            <div>Message: "Add your first plant to get started!"</div>
+            <div class="separator">============================================================</div>
+        </div>
+
+        <!-- Dashboard with Plants -->
+        <div id="withPlants" class="section hidden">
+            <div class="header">CURRENT STATUS</div>
+            <div class="separator">------------------------------------------------------------</div>
+            <div>Total Plants: <span id="total-plants">4</span></div>
+            <div>Need Water Today: <span id="need-water">2</span></div>
+            <div>Upcoming Care: 2</div>
+            <div style="margin-top: 20px;"></div>
+
+            <!-- Plant Card 1 -->
+            <div class="plant-card">
+                <div>PLANT CARD 1:</div>
+                <div class="separator">----------------------------------------------------------</div>
+                <div>Name: Monstera Deliciosa</div>
+                <div>Species: Monstera</div>
+                <div>Watering: Every 7 days</div>
+                <div>Sunlight: Medium</div>
+                <div>Care Level: Easy</div>
+                <div>Last Watered: 2024-12-05</div>
+                <div>Next Watering: 2024-12-12 (6 days)</div>
+                <div class="status-healthy">Status: ✅ Healthy</div>
+                <div style="margin-top: 10px;">
+                    <button class="button" onclick="waterPlant('Monstera Deliciosa', 1)">💧 Water Now</button>
+                    <button class="button">✏️ Edit</button>
+                    <button class="button">🗑️ Delete</button>
+                </div>
+                <div class="separator">----------------------------------------------------------</div>
+            </div>
+
+            <!-- Plant Card 2 -->
+            <div class="plant-card">
+                <div>PLANT CARD 2:</div>
+                <div class="separator">----------------------------------------------------------</div>
+                <div>Name: Snake Plant</div>
+                <div>Species: Sansevieria</div>
+                <div>Watering: Every 14 days</div>
+                <div>Sunlight: Low</div>
+                <div>Care Level: Easy</div>
+                <div>Last Watered: 2024-11-28</div>
+                <div>Next Watering: 2024-12-12 (6 days)</div>
+                <div class="status-healthy">Status: ✅ Healthy</div>
+                <div style="margin-top: 10px;">
+                    <button class="button" onclick="waterPlant('Snake Plant', 2)">💧 Water Now</button>
+                    <button class="button">✏️ Edit</button>
+                    <button class="button">🗑️ Delete</button>
+                </div>
+                <div class="separator">----------------------------------------------------------</div>
+            </div>
+
+            <!-- Plant Card 3 -->
+            <div class="plant-card">
+                <div>PLANT CARD 3:</div>
+                <div class="separator">----------------------------------------------------------</div>
+                <div>Name: Fiddle Leaf Fig</div>
+                <div>Species: Ficus lyrata</div>
+                <div>Watering: Every 5 days</div>
+                <div>Sunlight: High</div>
+                <div>Care Level: Difficult</div>
+                <div>Last Watered: 2024-12-01</div>
+                <div>Next Watering: 2024-12-06 (0 days)</div>
+                <div class="status-water blink">Status: 💧 Water today</div>
+                <div style="margin-top: 10px;">
+                    <button class="button" onclick="waterPlant('Fiddle Leaf Fig', 3)">💧 Water Now</button>
+                    <button class="button">✏️ Edit</button>
+                    <button class="button">🗑️ Delete</button>
+                </div>
+                <div class="separator">----------------------------------------------------------</div>
+            </div>
+
+            <!-- Plant Card 4 -->
+            <div class="plant-card" id="peace-lily-card">
+                <div>PLANT CARD 4:</div>
+                <div class="separator">----------------------------------------------------------</div>
+                <div>Name: Peace Lily</div>
+                <div>Species: Spathiphyllum</div>
+                <div>Watering: Every 3 days</div>
+                <div>Sunlight: Low</div>
+                <div>Care Level: Easy</div>
+                <div id="peace-lily-last">Last Watered: 2024-12-03</div>
+                <div id="peace-lily-next">Next Watering: 2024-12-06 (0 days)</div>
+                <div id="peace-lily-status" class="status-water blink">Status: 💧 Water today</div>
+                <div style="margin-top: 10px;">
+                    <button class="button" onclick="waterPlant('Peace Lily', 4)">💧 Water Now</button>
+                    <button class="button">✏️ Edit</button>
+                    <button class="button">🗑️ Delete</button>
+                </div>
+                <div class="separator">----------------------------------------------------------</div>
+            </div>
+
+            <div class="separator">============================================================</div>
+        </div>
+
+        <!-- Filtered View -->
+        <div id="filtered" class="section hidden">
+            <div class="separator">============================================================</div>
+            <div class="header">FILTER: Easy Care Plants</div>
+            <div class="separator">============================================================</div>
+            <div>Showing 3 of 4 plants</div>
+            <div style="margin-top: 20px;"></div>
+
+            <div class="plant-card">
+                <div>PLANT CARD 1: Monstera Deliciosa</div>
+                <div>Care Level: Easy | Status: ✅ Healthy</div>
+                <div style="margin-top: 10px;">
+                    <button class="button">View Details</button>
+                </div>
+            </div>
+
+            <div class="plant-card">
+                <div>PLANT CARD 2: Snake Plant</div>
+                <div>Care Level: Easy | Status: ✅ Healthy</div>
+                <div style="margin-top: 10px;">
+                    <button class="button">View Details</button>
+                </div>
+            </div>
+
+            <div class="plant-card">
+                <div>PLANT CARD 4: Peace Lily</div>
+                <div>Care Level: Easy | Status: 💧 Water today</div>
+                <div style="margin-top: 10px;">
+                    <button class="button">View Details</button>
+                </div>
+            </div>
+
+            <div class="separator">============================================================</div>
+            <div style="margin-top: 20px;">
+                <button class="button" onclick="showScreen('withPlants')">🔄 Clear Filter</button>
+            </div>
+        </div>
+
+        <!-- After Watering Action -->
+        <div id="watered" class="section hidden">
+            <div class="separator">============================================================</div>
+            <div>ACTION: Marked "Peace Lily" as watered</div>
+            <div class="separator">============================================================</div>
+            <div style="margin-top: 20px;">Updated Status:</div>
+            <div>Name: Peace Lily</div>
+            <div>Last Watered: 2024-12-06 (Today)</div>
+            <div>Next Watering: 2024-12-09 (3 days)</div>
+            <div class="status-healthy">Status: ✅ Healthy</div>
+            <div style="margin-top: 20px;"></div>
+            <div>Dashboard Updated:</div>
+            <div>Need Water Today: 1 (decreased from 2)</div>
+            <div class="separator">============================================================</div>
+            <div style="margin-top: 20px;">
+                <button class="button" onclick="showScreen('withPlants')">← Back to Dashboard</button>
+            </div>
+        </div>
+
+        <!-- Add Plant Form -->
+        <div id="addPlant" class="section hidden">
+            <div class="separator">============================================================</div>
+            <div class="header">ADD NEW PLANT</div>
+            <div class="separator">============================================================</div>
+            
+            <div class="input-section">
+                <div>Plant Name:</div>
+                <input type="text" id="plant-name" placeholder="e.g., Monstera Deliciosa">
+                
+                <div style="margin-top: 15px;">Species:</div>
+                <input type="text" id="plant-species" placeholder="e.g., Monstera">
+                
+                <div style="margin-top: 15px;">Watering Frequency (days):</div>
+                <input type="number" id="plant-frequency" placeholder="e.g., 7" min="1">
+                
+                <div style="margin-top: 15px;">Sunlight Needs:</div>
+                <select id="plant-sunlight">
+                    <option value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                </select>
+                
+                <div style="margin-top: 15px;">Care Level:</div>
+                <select id="plant-care">
+                    <option value="Easy">Easy</option>
+                    <option value="Moderate">Moderate</option>
+                    <option value="Difficult">Difficult</option>
+                </select>
+                
+                <div style="margin-top: 15px;">Last Watered Date:</div>
+                <input type="date" id="plant-date">
+                
+                <div style="margin-top: 20px;">
+                    <button class="button" onclick="addNewPlant()">✅ Add Plant</button>
+                    <button class="button" onclick="cancelAdd()">❌ Cancel</button>
+                </div>
+            </div>
+            
+            <div class="separator">============================================================</div>
+        </div>
+
+        <!-- Success Message -->
+        <div id="success-message" class="section hidden">
+            <div class="separator">============================================================</div>
+            <div class="status-healthy" style="text-align: center; font-size: 1.2em;">
+                ✅ PLANT ADDED SUCCESSFULLY!
+            </div>
+            <div class="separator">============================================================</div>
+            <div style="margin-top: 20px;">
+                <div>Your plant has been added to the dashboard.</div>
+                <div>Total Plants: <span id="new-total">5</span></div>
+            </div>
+            <div style="margin-top: 20px;">
+                <button class="button" onclick="showScreen('withPlants')">View Dashboard</button>
+                <button class="button" onclick="showScreen('addPlant')">Add Another Plant</button>
+            </div>
+            <div class="separator">============================================================</div>
+        </div>
+
+    </div>
+
+    <script>
+        let totalPlants = 4;
+        let needWater = 2;
+
+        function showScreen(screenName) {
+            // Hide all sections
+            const sections = ['initial', 'withPlants', 'filtered', 'watered', 'addPlant', 'success-message'];
+            sections.forEach(section => {
+                document.getElementById(section).classList.add('hidden');
+            });
+
+            // Show selected section
+            document.getElementById(screenName).classList.remove('hidden');
+
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        function waterPlant(plantName, cardNum) {
+            if (plantName === 'Peace Lily') {
+                // Update Peace Lily card
+                document.getElementById('peace-lily-last').textContent = 'Last Watered: 2024-12-06 (Today)';
+                document.getElementById('peace-lily-next').textContent = 'Next Watering: 2024-12-09 (3 days)';
+                document.getElementById('peace-lily-status').className = 'status-healthy';
+                document.getElementById('peace-lily-status').textContent = 'Status: ✅ Healthy';
+                
+                // Update counter
+                needWater = 1;
+                document.getElementById('need-water').textContent = needWater;
+                
+                // Show watered screen
+                setTimeout(() => {
+                    showScreen('watered');
+                }, 500);
+            } else {
+                alert('💧 ' + plantName + ' has been watered!\n\nStatus updated to: ✅ Healthy');
+            }
+        }
+
+        function addNewPlant() {
+            const name = document.getElementById('plant-name').value;
+            const species = document.getElementById('plant-species').value;
+            const frequency = document.getElementById('plant-frequency').value;
+            const sunlight = document.getElementById('plant-sunlight').value;
+            const care = document.getElementById('plant-care').value;
+            const date = document.getElementById('plant-date').value;
+
+            if (name && species && frequency && date) {
+                totalPlants++;
+                document.getElementById('total-plants').textContent = totalPlants;
+                document.getElementById('new-total').textContent = totalPlants;
+                
+                // Clear form
+                document.getElementById('plant-name').value = '';
+                document.getElementById('plant-species').value = '';
+                document.getElementById('plant-frequency').value = '';
+                document.getElementById('plant-date').value = '';
+                
+                // Show success message
+                showScreen('success-message');
+            } else {
+                alert('❌ Please fill in all required fields!');
+            }
+        }
+
+        function cancelAdd() {
+            showScreen('withPlants');
+        }
+
+        // Set today's date as default
+        window.onload = function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('plant-date').value = today;
+        };
+    </script>
+</body>
+</html>
